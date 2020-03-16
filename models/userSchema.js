@@ -12,6 +12,9 @@ var userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    file: {
+        type: String
+    },
     gender: String,
     phone: String,
     todos: [{

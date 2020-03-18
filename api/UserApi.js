@@ -4,6 +4,8 @@ var multer  = require('multer');
 var path = require('path')
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const passport = require('../passport');
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb)=> {
@@ -78,7 +80,7 @@ router.post('/login',(req, res, next)=> {
                 message: 'Auth failed'
             });
         }
-        bcrypt.compare(req.body.password, user[0].password, (err, result)=> {
+        bcrypt.compare(req.body.password, user.password, (err, result)=> {
             if(err){
                 return res.status(401).json({
                     message: 'Auth failed'
@@ -86,8 +88,8 @@ router.post('/login',(req, res, next)=> {
             }
             if(result){
                 const token = jwt.sign({
-                    email: user[0].email,
-                    userId: user[0]._id
+                    email: user.email,
+                    userId: user._id
                 },
                 process.env.JWT_KEY,
                 {
@@ -195,7 +197,7 @@ router.patch('/all/:user_id', function (req, res) {
             res.send(user)})
     });
 
-    router.post('/upload/:user_id', upload.single('file'), (req, res)=>{
+    router.post('/upload/:user_id', passport, upload.single('file'), (req, res)=>{
         console.log(req.file);
         if(!req.file){
             res.send(err);

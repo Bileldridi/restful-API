@@ -4,7 +4,9 @@ var multer  = require('multer');
 var path = require('path')
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
-const passport = require('../passport');
+const passport = require('passport');
+
+
 
 
 const storage = multer.diskStorage({
@@ -197,7 +199,7 @@ router.patch('/all/:user_id', function (req, res) {
             res.send(user)})
     });
 
-    router.post('/upload/:user_id', passport, upload.single('file'), (req, res)=>{
+    router.post('/upload/:user_id', passport.authenticate('bearer', { session: false }), upload.single('file'), (req, res)=>{
         console.log(req.file);
         if(!req.file){
             res.send(err);
@@ -212,6 +214,7 @@ router.patch('/all/:user_id', function (req, res) {
             });
 
     });
+
 router.get('/upload/:filename', function (req, res) {        
        const filepath = path.join(__dirname, "../images", req.params.filename);
         res.sendFile(filepath);

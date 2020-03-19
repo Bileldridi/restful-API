@@ -7,6 +7,8 @@ let apiRoutes = require("./api/todoApi")
 const nodemailer = require('nodemailer')
 var cors = require('cors');
 var cron = require("node-cron");
+var passport = require('./passport');
+
 app.use(bodyParser.urlencoded({
     extended: true
  }));
